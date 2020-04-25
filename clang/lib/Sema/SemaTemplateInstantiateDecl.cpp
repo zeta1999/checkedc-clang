@@ -4779,7 +4779,7 @@ void Sema::InstantiateVariableDefinition(SourceLocation PointOfInstantiation,
   LocalEagerInstantiationScope LocalInstantiations(*this);
 
   VarDecl *OldVar = Var;
-  if (Def->isStaticDataMember() && !Def->isOutOfLine()) {
+  if (Def && Def->isStaticDataMember() && !Def->isOutOfLine()) {
     // We're instantiating an inline static data member whose definition was
     // provided inside the class.
     InstantiateVariableInitializer(Var, Def, TemplateArgs);

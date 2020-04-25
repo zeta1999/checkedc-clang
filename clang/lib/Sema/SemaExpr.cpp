@@ -4487,7 +4487,7 @@ Sema::ActOnArraySubscriptExpr(Scope *S, Expr *base, SourceLocation lbLoc,
   // resolution for the operator overload should get the first crack
   // at the overload.
   bool IsMSPropertySubscript = false;
-  if (base->getType()->isNonOverloadPlaceholderType()) {
+  if (base && base->getType()->isNonOverloadPlaceholderType()) {
     IsMSPropertySubscript = isMSPropertySubscriptExpr(*this, base);
     if (!IsMSPropertySubscript) {
       ExprResult result = CheckPlaceholderExpr(base);

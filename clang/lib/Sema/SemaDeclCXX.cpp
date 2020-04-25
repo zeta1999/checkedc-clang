@@ -638,6 +638,7 @@ bool Sema::MergeCXXFunctionDecl(FunctionDecl *New, FunctionDecl *Old,
   // C++11 [dcl.constexpr]p1: If any declaration of a function or function
   // template has a constexpr specifier then all its declarations shall
   // contain the constexpr specifier.
+  assert(Old && "!Old");
   if (New->getConstexprKind() != Old->getConstexprKind()) {
     Diag(New->getLocation(), diag::err_constexpr_redecl_mismatch)
         << New << New->getConstexprKind() << Old->getConstexprKind();
@@ -1286,6 +1287,8 @@ static DeclAccessPair findDecomposableBaseClass(Sema &S, SourceLocation Loc,
         BestPath = &P;
       }
     }
+
+    assert(BestPath && "!BestPath");
 
     //   ... unambiguous ...
     QualType BaseType = BestPath->back().Base->getType();
@@ -2478,7 +2481,7 @@ bool Sema::AttachBaseSpecifiers(CXXRecordDecl *Class,
         const CXXRecordDecl *RD = cast<CXXRecordDecl>(Record->getDecl());
         if (Class->isInterface() &&
               (!RD->isInterfaceLike() ||
-               KnownBase->getAccessSpecifier() != AS_public)) {
+               (KnownBase && KnownBase->getAccessSpecifier() != AS_public))) {
           // The Microsoft extension __interface does not permit bases that
           // are not themselves public interfaces.
           Diag(KnownBase->getBeginLoc(), diag::err_invalid_base_in_interface)

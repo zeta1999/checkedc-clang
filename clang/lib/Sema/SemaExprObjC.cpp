@@ -586,6 +586,8 @@ ExprResult Sema::BuildObjCBoxedExpr(SourceRange SR, Expr *ValueExpr) {
       }
 
       BoxingMethod = StringWithUTF8StringMethod;
+      assert(BoxingMethod && "!BoxingMethod");
+
       BoxedType = NSStringPointer;
       // Transfer the nullability from method's return type.
       Optional<NullabilityKind> Nullability =

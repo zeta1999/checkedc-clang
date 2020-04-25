@@ -13522,7 +13522,7 @@ TreeTransform<Derived>::RebuildCXXOperatorCallExpr(OverloadedOperatorKind Op,
   }
 
   // Determine whether this should be a builtin operation.
-  if (Op == OO_Subscript) {
+  if (Op == OO_Subscript && Second) {
     if (!First->getType()->isOverloadableType() &&
         !Second->getType()->isOverloadableType())
       return getSema().CreateBuiltinArraySubscriptExpr(

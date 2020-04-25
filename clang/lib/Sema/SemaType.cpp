@@ -8315,7 +8315,7 @@ bool Sema::RequireCompleteTypeImpl(SourceLocation Loc, QualType T,
   // unless it's actually needed.
   if (Tag || IFace) {
     // Avoid diagnosing invalid decls as incomplete.
-    if (Def->isInvalidDecl())
+    if (Def && Def->isInvalidDecl())
       return true;
 
     // Give the external AST source a chance to complete the type.

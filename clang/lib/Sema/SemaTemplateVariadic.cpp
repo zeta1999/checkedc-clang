@@ -751,6 +751,8 @@ bool Sema::CheckParameterPacksForExpansion(
   // retain an expansion.
   if (NumPartialExpansions) {
     if (NumExpansions && *NumExpansions < *NumPartialExpansions) {
+      assert(CurrentInstantiationScope && "!CurrentInstantiationScope");
+
       NamedDecl *PartialPack =
           CurrentInstantiationScope->getPartiallySubstitutedPack();
       Diag(EllipsisLoc, diag::err_pack_expansion_length_conflict_partial)

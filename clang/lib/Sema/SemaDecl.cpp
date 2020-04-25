@@ -6672,6 +6672,8 @@ static void checkDLLAttributeRedeclaration(Sema &S, NamedDecl *OldDecl,
           << NewDecl;
       S.Diag(OldDecl->getLocation(), diag::note_previous_declaration);
       NewDecl->dropAttr<DLLImportAttr>();
+
+      assert(NewImportAttr && "!NewImportAttr");
       NewDecl->addAttr(::new (S.Context) DLLExportAttr(
           NewImportAttr->getRange(), S.Context,
           NewImportAttr->getSpellingListIndex()));
@@ -10621,7 +10623,7 @@ static bool CheckMultiVersionFunction(Sema &S, FunctionDecl *NewFD,
 
   // Main isn't allowed to become a multiversion function, however it IS
   // permitted to have 'main' be marked with the 'target' optimization hint.
-  if (NewFD->isMain()) {
+  if (NewTA && NewFD->isMain()) {
     if ((MVType == MultiVersionKind::Target && NewTA->isDefaultVersion()) ||
         MVType == MultiVersionKind::CPUDispatch ||
         MVType == MultiVersionKind::CPUSpecific) {
@@ -13518,6 +13520,8 @@ Sema::BuildDeclaratorGroup(MutableArrayRef<Decl *> Group) {
         Deduced = DT->getDeducedType();
         DeducedDecl = D;
       } else if (!Context.hasSameType(DT->getDeducedType(), Deduced)) {
+        assert(DeducedDecl && "!DeducedDecl");
+
         auto *AT = dyn_cast<AutoType>(DT);
         Diag(D->getTypeSourceInfo()->getTypeLoc().getBeginLoc(),
              diag::err_auto_different_deductions)

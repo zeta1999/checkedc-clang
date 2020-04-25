@@ -509,11 +509,11 @@ ExprResult Sema::BuildCXXTypeId(QualType TypeInfoType,
     }
   }
 
-  if (E->getType()->isVariablyModifiedType())
+  if (E && E->getType()->isVariablyModifiedType())
     return ExprError(Diag(TypeidLoc, diag::err_variably_modified_typeid)
                      << E->getType());
   else if (!inTemplateInstantiation() &&
-           E->HasSideEffects(Context, WasEvaluated)) {
+           E && E->HasSideEffects(Context, WasEvaluated)) {
     // The expression operand for typeid is in an unevaluated expression
     // context, so side effects could result in unintended consequences.
     Diag(E->getExprLoc(), WasEvaluated

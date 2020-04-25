@@ -5763,11 +5763,11 @@ void InitializationSequence::InitializeFrom(Sema &S,
     DeclAccessPair dap;
     if (isLibstdcxxPointerReturnFalseHack(S, Entity, Initializer)) {
       AddZeroInitializationStep(Entity.getType());
-    } else if (Initializer->getType() == Context.OverloadTy &&
+    } else if (Initializer && Initializer->getType() == Context.OverloadTy &&
                !S.ResolveAddressOfOverloadedFunction(Initializer, DestType,
                                                      false, dap))
       SetFailed(InitializationSequence::FK_AddressOfOverloadFailed);
-    else if (Initializer->getType()->isFunctionType() &&
+    else if (Initializer && Initializer->getType()->isFunctionType() &&
              isExprAnUnaddressableFunction(S, Initializer))
       SetFailed(InitializationSequence::FK_AddressOfUnaddressableFunction);
     else
